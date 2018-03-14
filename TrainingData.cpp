@@ -20,6 +20,7 @@ TrainingData::TrainingData(const char* file_path, int dims)
 
         cols = table[0].size();
         dimensions = dims;
+        //last_index = dimensions;
         last_index = cols - 1;
 }
 
@@ -85,6 +86,7 @@ void TrainingData::getMatrix()
 
 void TrainingData::disp()
 {
+        cout << "num_flavor: "<<num_flavor <<endl;
         for (int flavor = 0; flavor < num_flavor; flavor ++) {
                 for (int i = 0; i < cols; i++) {
                         cout<<table[flavor][i]<<" ";
@@ -95,16 +97,46 @@ void TrainingData::disp()
 
 void TrainingData::getLastx(int flavor, vector<int> &x)
 {
+        for (int i = last_index; last_index - i <= dimensions; i--) {
+                x.push_back(table[flavor][i]);
+        }  // this is last x
+        last_index ++;  // this is for prediction
+}
+
+int TrainingData::preparex(int flavor, vector<int> &x, int current_index)
+{
+        for (int i = current_index - 1; current_index - i <= dimensions; i--) {
+                x.push_back(table[flavor][i]);
+        }
+        
+        return current_index >= cols ? -1 : table[flavor][current_index];
 }
 
 void TrainingData::getXY(int flavor, vector< vector<int> > &X, vector<int> &Y)
 {
+        for (int i = dimensions; i < cols; i++) {
+                vector<int> x;
+                Y.push_back(preparex(flavor, x, i));
+                X.push_back(x);
+        }
 }
 
-void TrainingData::writeBack(int flavor, int pred_y)
+void TrainingData::writeBack(int flavor, int pred_y, int position)
 {
+        table[flavor][position] = pred_y;
 }
 
-void calculateSum(int flavor, int begin, int end)
+int TrainingData::calculateSum(int flavor, int begin, int end)  // in fact, begin = cols
 {
+        if (begin != cols) {
+                cout << "summation calculation error!"<<endl;
+                exit(-1);
+        }
+
+        int sum = 0;
+        for (int i = begin; i <= end; i ++) {
+                sum += table[flavor][i];
+        }
+        return sum;
+
 }

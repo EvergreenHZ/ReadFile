@@ -1,7 +1,8 @@
-SRC=main.cpp TrainingData.cpp
-OBJ=main.o TrainingData.o
-test: ${OBJ}
-	g++ -o $@ $^
+TARGET=a.out
+SRC=test.cpp TrainingData.cpp utils.cpp LinearRegression.cpp matrix.cpp
+OBJ=test.o TrainingData.o utils.o LinearRegression.o matrix.o
+${TARGET}: ${OBJ}
+	g++ -o $@ $^ -g 
 
 clean:
-	rm -r ${OBJ} test
+	rm -r ${OBJ} ${TARGET}
