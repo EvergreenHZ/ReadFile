@@ -1,6 +1,7 @@
 #include "LinearRegression.h"
 #include <iostream>
 #include <vector>
+#include <cstdlib>
 #include "matrix.h"
 using namespace std;
 
@@ -35,14 +36,21 @@ void LinearRegression::fit(vector< vector<int> > &X, vector<int> &Y)
         for (int i = 0; i < Y.size(); i++) {
                 YY(i, 0) = Y[i];
         }
-
+        //cout<<XX<<endl<<YY<<endl;
 
         // Now, I have XX and YY and coef
         //cout<<XX<<endl;
         //cout<<YY.transpose()<<endl;
         for (int i = 0; i < num_iter; i++) {  // update the coefficient
                 Matrix tmp = XX;
+                //cout<<alpha / X.size()<<endl;
+                cout<<coef<<endl;
                 coef = coef - (alpha / X.size()) * XX.transpose() * (tmp * coef - YY);
+
+                cout<<coef<<endl;
+                for (int j = 0; j < dimensions + 1; j++) {
+                        if (coef(j, 0) > 10) exit(-1);
+                }
 
                 J_hist.push_back(computeCost(XX, YY, coef));
         }
@@ -56,7 +64,12 @@ void LinearRegression::fit(vector< vector<int> > &X, vector<int> &Y)
 
 int LinearRegression::predict(vector<int> &x)
 {
-        double pred_y = dot(theta, x) + intercept > 0;
+        double pred_y = dot(theta, x) + intercept ;
+        if (pred_y > 0) {
+                int tmp_y = (int)pred_y;
+                if (pred_y - tmp_y >= 0.5)
+                        pred_y = int(pred_y) + 1;
+        }
         return pred_y > 0 ? int(pred_y) : 0;
 }
 
