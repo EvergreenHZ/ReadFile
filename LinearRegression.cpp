@@ -44,10 +44,10 @@ void LinearRegression::fit(vector< vector<int> > &X, vector<int> &Y)
         for (int i = 0; i < num_iter; i++) {  // update the coefficient
                 Matrix tmp = XX;
                 //cout<<alpha / X.size()<<endl;
-                cout<<coef<<endl;
+                //cout<<coef<<endl;
                 coef = coef - (alpha / X.size()) * XX.transpose() * (tmp * coef - YY);
 
-                cout<<coef<<endl;
+                //cout<<coef<<endl;
                 for (int j = 0; j < dimensions + 1; j++) {
                         if (coef(j, 0) > 10) exit(-1);
                 }

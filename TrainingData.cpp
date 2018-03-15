@@ -108,7 +108,7 @@ int TrainingData::preparex(int flavor, vector<int> &x, int current_index)
         for (int i = current_index - 1; current_index - i <= dimensions; i--) {
                 x.push_back(table[flavor][i]);
         }
-        
+
         return current_index >= cols ? -1 : table[flavor][current_index];
 }
 
@@ -139,4 +139,16 @@ int TrainingData::calculateSum(int flavor, int begin, int end)  // in fact, begi
         }
         return sum;
 
+}
+
+void TrainingData::prediction(int flavor, int duration, LinearRegression &lr)
+{
+        for (int j = 0; j < duration; j++) {
+                vector<int> x;
+                preparex(flavor, x, cols + j);
+
+                int pred_y = lr.predict(x);
+                cout<<pred_y<<" ";
+                writeBack(flavor, pred_y, cols + j);
+        }
 }

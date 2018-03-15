@@ -2,6 +2,7 @@
 #define TRAININGDATA_H
 #include <string>
 #include <vector>
+#include "LinearRegression.h"
 using namespace std;
 class TrainingData {
         public:
@@ -26,6 +27,8 @@ class TrainingData {
                 void disp();
 
                 //void train()
+                //
+                void prediction(int flavors, int duration, LinearRegression &lr);
 
                 int preparex(int flavor, vector<int> &x, int );
 
